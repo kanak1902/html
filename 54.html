@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Alphabet Cards A-Z</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+
+    #main-view {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .card {
+      background-color: grey;
+      width: 180px;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      padding: 30px;
+      text-align: center;
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    .card h1 {
+      font-size: 60px;
+      margin: 0;
+    }
+
+    #detail-view {
+      display: none;
+      text-align: center;
+      padding: 40px;
+    }
+
+    #detail-view h1 {
+      font-size: 100px;
+      margin: 0;
+    }
+
+    #detail-view p {
+      font-size: 30px;
+      margin: 10px 0;
+    }
+
+    #detail-view img {
+      width: 300px;
+      border-radius: 15px;
+      margin-top: 20px;
+    }
+
+    #back-btn {
+      display: inline-block;
+      margin-top: 30px;
+      font-size: 18px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: black;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    #back-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<div id="main-view"></div>
+
+<div id="detail-view">
+  <h1 id="letter"></h1>
+  <p id="description"></p>
+  <img id="image" src="" alt="">
+  <br>
+  <button id="back-btn">← Back to A–Z</button>
+</div>
+
+<script>
+  const alphabetData = {
+    A: { word: "Apple", image: "https://img.freepik.com/free-psd/close-up-delicious-apple_23-2151868338.jpg" },
+    B: { word: "Ball", image: "https://pics.clipartpng.com/Soccer_Ball_PNG_Clip_Art-1361.png" },
+    C: { word: "car", image: "https://static.vecteezy.com/system/resources/previews/001/193/929/non_2x/vintage-car-png.png" },
+    D: { word: "Dog", image: "https://upload.wikimedia.org/wikipedia/commons/d/d9/Collage_of_Nine_Dogs.jpg" },
+    E: { word: "Elephant", image: "https://upload.wikimedia.org/wikipedia/commons/3/37/African_Bush_Elephant.jpg" },
+    F: { word: "Fish", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCSw1lP1NQ7WF0HTbecDI-umwOKTDEhgjKtQ&s" },
+    G: { word: "Gun", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0UIXA0sfwGhTBmMN6JMgdLfqSUB6ZLGWcnQ&s" },
+    H: { word: "Horse", image: "https://images.pexels.com/photos/1996333/pexels-photo-1996333.jpeg" },
+    I: { word: "Ice Cream", image: "https://media.istockphoto.com/id/685816670/photo/variety-of-ice-cream-cones.jpg?s=612x612&w=0&k=20&c=I2BkvccjpB6nkLnWxY6AGh0RAonuPMwHk-rsBhK18IQ=" },
+    J: { word: "Juice", image: "https://media.istockphoto.com/id/158268808/photo/fresh-citrus-juices.jpg?s=612x612&w=0&k=20&c=vflsrO3KXXtWfpOOzNZdBVgeIpLy21-OSUl-QPSgPmU=" },
+    K: { word: "Kiwi", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Kiwi_%28Actinidia_chinensis%29_1_Luc_Viatour.jpg/1200px-Kiwi_%28Actinidia_chinensis%29_1_Luc_Viatour.jpg" },
+    L: { word: "Lion", image: "https://upload.wikimedia.org/wikipedia/commons/7/73/Lion_waiting_in_Namibia.jpg" },
+    M: { word: "Mango", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTzJZlB0oX8mMUfx3LBwu-54hsaVC_pOTHwg&s" },
+    N: { word: "Nest", image: "https://t4.ftcdn.net/jpg/00/30/25/75/360_F_30257565_GcXxbj6xBHc62qTyUNv6ZZE9L79f2fX9.jpg" },
+    O: { word: "Owl", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQ32QbK7TPP-UOZxhM5guOIOkIsQ7mz7G0Rw&s" },
+    P: { word: "Parrot", image: "https://images.pexels.com/photos/97533/pexels-photo-97533.jpeg?cs=srgb&dl=pexels-siva301in-97533.jpg&fm=jpg" },
+    Q: { word: "Queen", image: "https://t4.ftcdn.net/jpg/05/89/67/65/360_F_589676569_jxEg8zZ6oOTvdho2QZ2yB5ZEErQuLuWE.jpg" },
+    R: { word: "Rocket", image: "https://static.vecteezy.com/system/resources/thumbnails/047/600/879/small/white-missile-rocket-launching-with-fiery-trail-cut-out-stock-png.png" },
+    S: { word: "Sun", image: "https://upload.wikimedia.org/wikipedia/commons/c/c3/Solar_sys8.jpg" },
+    T: { word: "Tiger", image: "https://upload.wikimedia.org/wikipedia/commons/5/56/Tiger.50.jpg" },
+    U: { word: "Umbrella", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXTdGyxYD8aqaojeCgDzCnxnCMl9dbJTBfiw&s" },
+    V: { word: "Van", image: "https://media.istockphoto.com/id/1440745974/photo/parked-white-van.jpg?s=612x612&w=0&k=20&c=1vlfM_85d3EpsM7xrGlBETFHw7F7zHQXhDUxdMc23_4=" },
+    W: { word: "Watch", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrrvRWDpRts3ffsdJKXCCqzfSaLNGc2Bxc5g&s" },
+    X: { word: "Xylophone", image: "https://t3.ftcdn.net/jpg/03/17/01/94/360_F_317019441_ckhkB619SWOfVAgmlH9zBIZiMd6SxEwQ.jpg" },
+    Y: { word: "Yak", image: "https://st3.depositphotos.com/1765681/13402/i/450/depositphotos_134021616-stock-photo-domestic-yak-bos-grunniens.jpg" },
+    Z: { word: "Zebra", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQL_s8wtIavlIvGHdCcIZoDerOT_YxPL4qcig&s" }
+  };
+
+  const mainView = document.getElementById('main-view');
+  const detailView = document.getElementById('detail-view');
+  const letterEl = document.getElementById('letter');
+  const descriptionEl = document.getElementById('description');
+  const imageEl = document.getElementById('image');
+  const backBtn = document.getElementById('back-btn');
+
+  for (let letter in alphabetData) {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `<h1>${letter}</h1>`;
+    card.addEventListener('click', () => showDetail(letter));
+    mainView.appendChild(card);
+  }
+
+  function showDetail(letter) {
+    const data = alphabetData[letter];
+    letterEl.textContent = letter;
+    descriptionEl.textContent = `${letter} for ${data.word}`;
+    imageEl.src = data.image;
+    imageEl.alt = data.word;
+
+    mainView.style.display = 'none';
+    detailView.style.display = 'block';
+  }
+
+  backBtn.addEventListener('click', () => {
+    detailView.style.display = 'none';
+    mainView.style.display = 'flex';
+  });
+</script>
+
+</body>
+</html>
